@@ -221,6 +221,13 @@ require get_template_directory() . '/inc/api-apropos.php';
 
 require get_template_directory() . '/inc/utils/utils-seo.php';
 
+/**
+ * New
+ */
+
+ require get_template_directory() . '/utils/utils.php';
+require get_template_directory() . '/modules/iowcmodules/products/products-functions.php';
+
 
 
 
