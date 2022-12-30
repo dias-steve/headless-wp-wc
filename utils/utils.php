@@ -13,3 +13,17 @@ function ioGetFrontendLink($id_post){
     $postType = get_post_type($id_post);
     return '/'.$postType.'/'.$id_post;
 }
+
+function ioOperatorExtractor($str)
+{
+
+    $operatorlist = array('<=', '>=', '=', '<', '>');
+
+    foreach ($operatorlist as $operator) {
+        if (strpos($str, $operator)) {
+            return $operator;
+        }
+    }
+
+    return null;
+}

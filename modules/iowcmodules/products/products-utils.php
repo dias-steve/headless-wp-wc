@@ -1,5 +1,5 @@
 <?php
-
+    require get_template_directory() . '/modules/iowcmodules/products/ChildrenObject.php';
 /**
  *Get all products
  * @since IOWC 1
@@ -9,6 +9,7 @@
 function ioGetProductData($queryArray){
 
     $results = array();
+    //$queryArray['post_status' ] = 'publish'; //   'post_status' => 'publish',
     $mainQuery = new WP_Query($queryArray);
 
     while ($mainQuery->have_posts()) {
@@ -30,6 +31,35 @@ function ioGetProductData($queryArray){
 
 }
 
+function ioGetSingleProductData($id_post){
+
+    $results = null;
+    $queryArray = array(
+        'post_type' => array('product'),
+        'post_id' => $id_post,
+    );
+    $queryArray['post_status'] = 'publish'; //   'post_status' => 'publish',
+    $mainQuery = new WP_Query(  $queryArray);
+
+    while ($mainQuery->have_posts()) {
+
+
+        $mainQuery->the_post();
+       
+        if(get_the_ID() == $id_post){
+
+            $productData =  ioGetSingleProductDataFormated();
+
+            $results = $productData;
+        }
+
+    }
+     
+    
+
+    return $results;
+
+}
 
 /**
  *Format data for the front
@@ -58,6 +88,50 @@ function ioGetProductDataAperçuFormated(){
         'ship_class' => $product->get_shipping_class(),
         'categories' => $product->get_category_ids(),
         'date_created' => $product->get_date_created() 
+    );
+}
+
+/**
+ *Format data for the front
+ * @since IOWC 1
+ *
+ * @return array json
+ */
+function ioGetSingleProductDataFormated(){
+
+    $product = wc_get_product(get_the_ID());
+    $id_post= get_the_ID();
+    $children_data = new ChildrenProduct($product,get_field('shippement_cost_unit'), get_field('free_shippement'));
+
+
+    return array(
+        'id' =>  $id_post,
+        'title' => get_the_title(),
+        'name' => $product->get_name(),
+        'price' => ioPriceValidFilter($product->get_price()),
+        'regular_price' => $product->get_regular_price(),
+        'sale_price' => $product->get_sale_price(),
+        'thumbnail' => ioGetThumbnailFormated( $id_post),
+        'link' => ioGetFrontendLink($id_post),
+        'stock_status' => $product->get_stock_status(),
+        'images_gallery' =>  ioGetImagesGalleryProduct($product),
+        'ship_class' => $product->get_shipping_class(),
+        'product_is_individual' => get_field('produit_is_individual'),
+        'categories' => $product->get_category_ids(),
+        'date_created' => $product->get_date_created(),
+        'children' =>$children_data->list,
+
+        'on_sale' =>$children_data->haveOnSaleChild(),//|| 'parent',
+        'in_stock' => $product->get_stock_status(),
+        'product_is_in_stock'=>$children_data->productIsInStock(),
+        'list_variations' =>$children_data->getListVariationAvailble(),
+        'product_is_variable'=>  $children_data->haveVariations(),
+        'multi_price' => array(
+            'have_multi_price' =>$children_data->isMultiPrice(),
+            'price_min' => $children_data->getMinPrice(),
+            'price_max' =>$children_data->getMaxPrice(),
+        ),
+    
     );
 }
 
@@ -105,58 +179,3 @@ function ioGetImagesGalleryProduct($product){
     return $images;
 }
 
-function ioGetChildrensProduct($product){
-    $children_ids = $product->get_children();
-    $children_data = array();
-    $on_sale_parent = false;
-    $multi_price = false;
-    $price_max = 0;
-    $price_min = 0;
-
-    foreach ($children_ids as $child_id) {
-        $childData = wc_get_product($child_id);
-        $thumbnail_id_child = get_post_thumbnail_id($child_id);
-        $alt_child = get_post_meta($thumbnail_id_child, '_wp_attachment_image_alt', true); 
-        $thumbnail_url_child = get_the_post_thumbnail_url($child_id);
-        $on_sale = false;
-        $shipping_cost_unit= get_field('shippement_cost_unit');
-        $is_free_shippement = get_field('free_shippement');
-
-
-        if(($childData->get_regular_price() !=="")&&($childData->get_regular_price()!==$childData->get_price())){
-            $on_sale= true;
-            $on_sale_parent=true;
-        }
-        
-        if((float)$childData->get_price() > $price_max){
-            $price_max = (float)$childData->get_price(); 
-        }
-        if( $price_min > 0){
-            if((float)$childData->get_price() < $price_min){
-                $price_min = (float)$childData->get_price(); 
-            }
-        }else{
-            $price_min = (float)$childData->get_price(); 
-        }
-
-
-        array_push($children_data, array(
-            'id' => $child_id,
-            'name' => $childData->get_name(),
-            'price' =>priceValidFilter($childData->get_price()),
-            'regular_price' => $childData->get_regular_price(),
-            'stock_status' => $childData->get_stock_status(),
-            'variation_name' => 'ok',//$childData->get_variation_attributes(),
-            'ship_class' => $childData->get_shipping_class(),
-            'free_shippement' =>  $is_free_shippement,
-            'on_sale'=> $on_sale,
-            'shipping_cost_unit' => $shipping_cost_unit,
-            'thumnail'=> array(
-                'url' => $thumbnail_url_child ? $thumbnail_url_child :get_the_post_thumbnail_url() ,
-                'alt' =>  $thumbnail_url_child ? $alt_child : 'alt_parent'
-            ),
-        ));
-    }
-
-  
-}
