@@ -243,4 +243,23 @@ class ChildrenProduct
             
         }
     }
+
+
+    public function getGalleryImage(){
+        $images_id = $this->product->get_gallery_attachment_ids();
+        $images = array();
+    
+        foreach ($images_id as $attachment_id) {
+            $image_link = wp_get_attachment_url($attachment_id);
+            array_push($images, array(
+                'attachement_id' => $attachment_id,
+                'url' => $image_link,
+                'alt' => get_post_meta($attachment_id, '_wp_attachment_image_alt', true) 
+            ));
+        }
+    
+        return $images;
+    }
+
+
 }
