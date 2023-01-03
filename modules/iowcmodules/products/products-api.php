@@ -20,11 +20,16 @@ function ioGetProduct(WP_REST_Request $request) {
    
 
     return array(
-        'query' => ioConvertToQuery(array('product'), $request ),
-        'result' => ioGetProductData(ioConvertToQuery(array('product'), $request )));
+        'status' => 200,
+        'data' => array(
+            'query' => ioConvertToQuery(array('product'), $request ),
+            'result' => ioGetProductData(ioConvertToQuery(array('product'), $request )))
+        );
 }
 
 
 function ioGetSingleProduct($param){
-    return ioGetSingleProductData($param['id']);
+    return array( 
+        'status' => 200,
+        'data'=> ioGetSingleProductData($param['id']));
 }
