@@ -90,7 +90,10 @@ function isValidPrice($price){
     }else{
         if(floatval($price)){
             return true;
+        }else{
+            return false;
         }
+    
        
     }
 }

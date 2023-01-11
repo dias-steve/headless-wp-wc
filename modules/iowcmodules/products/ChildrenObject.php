@@ -1,7 +1,7 @@
 <?php
 class ChildrenProduct
 {
-    public $list;
+    public $reformater_children_list;
     public $shipping_cost_unit;
     public $is_free_shippement;
     public $product;
@@ -15,7 +15,7 @@ class ChildrenProduct
         $this->shipping_cost_unit = $shipping_cost_unit;
         $this->is_free_shippement = $is_free_shippement;
         $this->product = $product;
-        $this->list = $this->getChildrensProduct();
+        $this->reformater_children_list = $this->getChildrensProduct();
 
 
         $this->child_id_list = $this->product->get_children();
@@ -24,8 +24,8 @@ class ChildrenProduct
     public function getMaxPrice()
     {
         $max = null;
-        if ($this->list) {
-            foreach ($this->list as $child) {
+        if ($this->reformater_children_list) {
+            foreach ($this->reformater_children_list as $child) {
                 if ($max  == null) {
                     $max = (float)$child['price'];
                 }
@@ -42,8 +42,8 @@ class ChildrenProduct
     {
 
         $min = null;
-        if ($this->list) {
-            foreach ($this->list as $child) {
+        if ($this->reformater_children_list) {
+            foreach ($this->reformater_children_list as $child) {
                 if ($min  == null) {
                     $min  = (float)$child['price'];
                 }
@@ -58,7 +58,7 @@ class ChildrenProduct
     public function isMultiPrice()
     {
         $formerPrice = null;
-        foreach ($this->list as $child) {
+        foreach ($this->reformater_children_list as $child) {
             if ($formerPrice == null) {
                 $formerPrice = (float)$child['price'];
             }
@@ -74,7 +74,7 @@ class ChildrenProduct
     public function haveOnSaleChild()
     {
         $onSale = false;
-        foreach ($this->list as $child) {
+        foreach ($this->reformater_children_list as $child) {
             if ($child['on_sale'] == true) {
                 $onSale = $child['on_sale'];
             }
@@ -121,6 +121,11 @@ class ChildrenProduct
                     'url' => $thumbnail_url_child ? $thumbnail_url_child : 'parent',
                     'alt' =>  $thumbnail_url_child ? $alt_child : 'alt_parent'
                 ),
+                'images_gallery' =>   $this->getGalleryChild($childData->get_variation_attributes()),
+                'sold_individualy' => $this->product->is_sold_individually(),
+                'product_is_in_stock' => (($childData->get_stock_status() ==='instock') && (isValidPrice($childData->get_price()))) ? true : false
+
+            
             ));
         }
 
@@ -128,6 +133,21 @@ class ChildrenProduct
     }
 
 
+    private function getGalleryChild($variation_attributes){
+        $parentGallery = ioGetImagesGalleryProduct($this->product);
+        $result = $parentGallery;
+        if(get_field('alt_gallery_is_actived')){
+            $galleryList = get_field('alt_gallery');
+            foreach( $galleryList as $gallery){
+                $convertedKey= "attribute_pa_".$gallery["key_variation"];
+                $valueVariationChild = $variation_attributes[$convertedKey];
+                if($gallery["value_variation"] ===  $valueVariationChild){
+                    return $gallery["gallery"];
+                }
+            }
+        }
+        return $result;
+    }
 
     private function getAvailablesTermesByVariationKey($variation_name, $childrens)
     {
@@ -190,7 +210,7 @@ class ChildrenProduct
     }
 
     public function getListVariationAvailble(){
-        $childrens = $this->list;
+        $childrens = $this->reformater_children_list;
         $listVariationkey = $this->getListVarariationKey($childrens);
         $listVariationAvailable = array();
         foreach($listVariationkey as $variationKey ){
@@ -220,7 +240,7 @@ class ChildrenProduct
         $inStockStatusProductParent=$this->product->get_stock_status();
         $listVariation = $this->getListVariationAvailble();
         $priceProductParent=$this->product->get_price();
-        $childrens = $this->list;
+        $childrens = $this->reformater_children_list;
         
         $variationInStock = false;
         if(haveVariations($listVariation)){
@@ -259,6 +279,13 @@ class ChildrenProduct
         }
     
         return $images;
+    }
+
+    public function getChildrensMatrix() {
+
+  
+       
+        return null;
     }
 
 

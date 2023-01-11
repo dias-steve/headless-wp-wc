@@ -105,6 +105,7 @@ function ioGetSingleProductDataFormated(){
 
 
     return array(
+  
         'id' =>  $id_post,
         'title' => get_the_title(),
         'name' => $product->get_name(),
@@ -116,21 +117,24 @@ function ioGetSingleProductDataFormated(){
         'stock_status' => $product->get_stock_status(),
         'images_gallery' =>  ioGetImagesGalleryProduct($product),
         'ship_class' => $product->get_shipping_class(),
-        'product_is_individual' => get_field('produit_is_individual'),
+        'sold_individualy' => $product->is_sold_individually(),
         'categories' => $product->get_category_ids(),
         'date_created' => $product->get_date_created(),
-        'children' =>$children_data->list,
+        'children' =>$children_data->reformater_children_list,
+     
 
         'on_sale' =>$children_data->haveOnSaleChild(),//|| 'parent',
         'in_stock' => $product->get_stock_status(),
         'product_is_in_stock'=>$children_data->productIsInStock(),
         'list_variations' =>$children_data->getListVariationAvailble(),
+        'variation_list_detail'=> isGetDescriptionAttribut($product, $id_post),
         'product_is_variable'=>  $children_data->haveVariations(),
         'multi_price' => array(
             'have_multi_price' =>$children_data->isMultiPrice(),
             'price_min' => $children_data->getMinPrice(),
             'price_max' =>$children_data->getMaxPrice(),
         ),
+        'variations_selected' => null, 
     
     );
 }
@@ -178,4 +182,49 @@ function ioGetImagesGalleryProduct($product){
 
     return $images;
 }
+
+function isGetDescriptionAttribut($product, $post_id){
+    
+    $result = array();
+    $all_attributes = $product->get_attributes();
+    $attributes = array();
+  
+    if (!empty($all_attributes)) {
+        foreach ($all_attributes as $attr_mame => $value) {
+            if ($all_attributes[$attr_mame]['is_taxonomy']) {
+            
+                    $termio =wc_get_product_terms($post_id, $attr_mame, array('fields'=> 'all'));
+                    $attributes['attribute_'.$attr_mame] = array_reduce($termio, function ($carry, $item){
+                        if(get_field('alt_gallery_is_actived')){
+                            $galleryList = get_field('alt_gallery');
+                            $item->thumnail = getThumbnailVariationByKeyvalue( 'attribute_'.$item->taxonomy,$item->slug);
+                        }
+                      
+                        $carry[$item->slug]= $item; 
+                        return $carry;
+                    }, array());
+            } else {
+                $attributes[$attr_mame] = $product->get_attribute($attr_mame);
+            }
+        }
+    }
+
+
+    return $attributes;
+}
+
+
+function getThumbnailVariationByKeyvalue($attributName, $valueVariationSlug){
+    $galleryList = get_field('alt_gallery');
+    foreach( $galleryList as $gallery){
+        $gallery["key_variation"];
+        $convertedKey= "attribute_pa_".$gallery["key_variation"];
+        if( $attributName=== $convertedKey && $gallery["value_variation"] ===   $valueVariationSlug){
+            return $gallery["thumbnail_term"];
+        }
+    }
+    return null;
+}
+
+
 
