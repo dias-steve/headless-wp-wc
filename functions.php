@@ -228,6 +228,10 @@ require get_template_directory() . '/inc/utils/utils-seo.php';
  require get_template_directory() . '/utils/utils.php';
 require get_template_directory() . '/modules/iowcmodules/products/products-functions.php';
 require get_template_directory() . '/modules/iowcmodules/productcategory/productcategory-functions.php';
+require get_template_directory() . '/modules/iowcmodules/shipping/shipping-functions.php';
+require get_template_directory() . '/modules/iowcmodules/coupon/coupon-functions.php';
+
+
 
 
 
