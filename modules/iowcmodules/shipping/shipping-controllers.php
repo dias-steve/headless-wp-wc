@@ -18,14 +18,16 @@ function ioGetAllShipmentsData()
            $method_rate_id = $method->get_rate_id(); // e.g. "flat_rate:18"
            array_push($methods, array(
             'method_title' => $method->get_method_title(),
-            '$method_id' => $method->id,
+            'method_id' => $method->id,
             'method_rate_id' => $method->get_rate_id(),
             'method_user_title' => $method->get_title(),
             'method_is_enbled'=>$method->is_enabled(),
             'method_cost' => $method->cost,
             'methode_description' => $method->get_method_description(),
             'method_instance_id' => $method->get_instance_id(),
-            'min_amount' => $method->min_amount
+            'min_amount' => $method->min_amount,
+            'class_shipping' => ""
+ 
           
             
         ));
