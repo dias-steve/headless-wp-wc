@@ -23,7 +23,7 @@ function ioGetAllShipmentsData()
             'method_user_title' => $method->get_title(),
             'method_is_enbled'=>$method->is_enabled(),
             'method_cost' => $method->cost,
-            'methode_description' => $method->get_method_description(),
+            'method_description' => $method->get_method_description(),
             'method_instance_id' => $method->get_instance_id(),
             'min_amount' => $method->min_amount,
             'class_shipping' => ""
