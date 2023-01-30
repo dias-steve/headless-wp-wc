@@ -352,9 +352,7 @@ function ioGetProductStockData($listItem)
 }
 
 
-function ioConvertStringRequestStockToObjectList($request){
-    $result = array();
-   
+function ioConvertStringRequestStockToObjectList($request){   
     $productList = explode('!', $request->get_param('products'));
     
     $productmap = array_map(
@@ -370,6 +368,6 @@ function ioConvertStringRequestStockToObjectList($request){
             return $productObject;
         }
         ,  $productList);
-    return   $productmap ;
+    return   $productmap;
 }
 

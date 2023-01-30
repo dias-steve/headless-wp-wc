@@ -40,7 +40,6 @@ function ioGetSingleProduct($param){
 
 function ioGetStockProduct(WP_REST_Request $request){
     $listProductStockRequest = ioConvertStringRequestStockToObjectList($request);
-    return array(
-        'request'=> $listProductStockRequest,
-        'result'=>ioGetProductStockData($listProductStockRequest));
+    return ioGetProductStockData($listProductStockRequest);
 }
+

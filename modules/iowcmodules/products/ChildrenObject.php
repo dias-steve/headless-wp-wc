@@ -107,6 +107,7 @@ class ChildrenProduct
 
 
             array_push($children_data, array(
+                'id_parent' =>  get_the_ID(),
                 'id' => $child_id,
                 'name' => $childData->get_name(),
                 'price' => priceValidFilter($childData->get_price()),
