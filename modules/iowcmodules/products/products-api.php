@@ -12,6 +12,10 @@ function ioProductRoute() {
         'callback' => 'ioGetSingleProduct' // notre fonfonction 
     ));
 
+    register_rest_route('io/v2','products/stocks',array(
+        'methods' => WP_REST_Server::READABLE,
+        'callback' => 'ioGetStockProduct' // notre fonfonction 
+    ));
 
 }
 add_action('rest_api_init', 'ioProductRoute');
@@ -32,4 +36,11 @@ function ioGetSingleProduct($param){
     return array( 
         'status' => 200,
         'data'=> ioGetSingleProductData($param['id']));
+}
+
+function ioGetStockProduct(WP_REST_Request $request){
+    $listProductStockRequest = ioConvertStringRequestStockToObjectList($request);
+    return array(
+        'request'=> $listProductStockRequest,
+        'result'=>ioGetProductStockData($listProductStockRequest));
 }

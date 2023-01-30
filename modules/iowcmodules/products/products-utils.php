@@ -121,6 +121,7 @@ function ioGetSingleProductDataFormated(){
     return array(
   
         'id' =>  $id_post,
+        'id_parent' =>  $id_post,
         'title' => get_the_title(),
         'name' => $product->get_name(),
         'price' => ioPriceValidFilter($product->get_price()),
@@ -288,5 +289,87 @@ function getThumbnailVariationByKeyvalue($attributName, $valueVariationSlug){
     return null;
 }
 
+//Vérification des stock pour une liste de items 
+function ioGetProductStockData($listItem)
+{
+    $resultsItems = array();
+    $items = $listItem;
+    $allInStock = true;
 
+    foreach ($items as $item) {
+        $mainQuery = new WP_Query(array(
+            'post_type' => array('product'),
+            'post_id' => $item['id_parent']
+        ));
+
+        while ($mainQuery->have_posts()) {
+
+
+            $mainQuery->the_post();
+
+            $available = true;
+            $code_error = 0;
+            if (get_the_ID() === (Int)$item['id_parent']) {
+
+                $product = wc_get_product($item['id']);
+                if ($product->is_in_stock() === false) {
+                    $allInStock = false;
+                    $code_error = 10;
+                    $available = false;
+                    array_push($resultsItems, array(
+                        'id' => $product->get_id(),
+                        'title' => $product->get_name(),
+                        'in_stock' => $product->is_in_stock(),
+                        'stock_quantity' => $product->get_stock_quantity(),
+                        'available' => $available,
+                        'code_error' => $code_error
+                    ));
+                } elseif ($product->get_stock_quantity()) {
+                    $quantityRest = $product->get_stock_quantity() - $item['quantity'];
+                    if ($quantityRest < 0) {
+                        $allInStock = false;
+                        $code_error = 20;
+                        array_push($resultsItems, array(
+                            'id' => $product->get_id(),
+                            'title' =>  $product->get_name(),
+                            'in_stock' => $product->is_in_stock(),
+                            'stock_quantity' => $product->get_stock_quantity(),
+                            'available' => $available,
+                            'code_error' => $code_error
+                        ));
+                    }
+                }
+            }
+        }
+    }
+
+    $results = array(
+        'all_in_stock' =>  $allInStock,
+        'items_no_stock' => $resultsItems,
+    );
+
+    return $results;
+}
+
+
+function ioConvertStringRequestStockToObjectList($request){
+    $result = array();
+   
+    $productList = explode('!', $request->get_param('products'));
+    
+    $productmap = array_map(
+        function($productString){
+            $productAttList= explode(',', $productString);
+
+            $productObject=array_reduce($productAttList, function($object,$productAtt ){
+                $productAttExp =  explode('=',$productAtt);
+                $object[$productAttExp[0]] = $productAttExp[1];
+                return $object;
+            }, array());
+
+            return $productObject;
+        }
+        ,  $productList);
+    return   $productmap ;
+}
 
