@@ -3,6 +3,7 @@
 function ioGetProductPriceList($productIdList){
 
     $result = null;
+    $all_product_is_found = true;
 
     $productlistResult = array();
     if(is_array($productIdList)){
@@ -17,7 +18,9 @@ function ioGetProductPriceList($productIdList){
                 if (get_the_ID() === (Int) $productData['id_parent']){
                 $cost_shipping= get_field('shippement_cost_unit');
                 $product = wc_get_product($productData['id']);
-
+                if($product){
+                  
+                
                 array_push($productlistResult, array(
                     'id' =>  $productData['id'],
                     'title' => $product->get_name(),
@@ -28,13 +31,20 @@ function ioGetProductPriceList($productIdList){
                     'sale_price' => $product->get_sale_price(),
                     'quantity' =>$productData['quantity']
                 ));
+                }else {
+                    $all_product_is_found = false;
+                }
             }
             }
   
         };
     }
 
-    return    $productlistResult;
+    if(!$all_product_is_found){
+        return [];
+    }
+
+    return $productlistResult;
 
 }
 
@@ -189,6 +199,22 @@ function ioGetTotalPriceOrder($productIdList, $shippingMethod){
             'sub_total_shipping_cost_sup'=> 0,
             'total' => -1
         
+        );
+    }
+
+
+    if(!count($productIdList) > 0){
+        return array(
+            'trust_result' => array(
+                'is_trust' =>false,
+                'message' => 'Product not found',
+            ),
+            'detail' => array(),
+            'shipping_method' => $shippingMethod,
+            'shippingCost' => $shippingCost,
+            'sub_total_product' => 0,
+            'sub_total_shipping_cost_sup'=> 0,
+            'total' => -1
         );
     }
     return $totalResult;
