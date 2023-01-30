@@ -230,6 +230,7 @@ require get_template_directory() . '/modules/iowcmodules/products/products-funct
 require get_template_directory() . '/modules/iowcmodules/productcategory/productcategory-functions.php';
 require get_template_directory() . '/modules/iowcmodules/shipping/shipping-functions.php';
 require get_template_directory() . '/modules/iowcmodules/coupon/coupon-functions.php';
+require get_template_directory() . '/modules/iowcmodules/orders/orders-functions.php';
 
 
 

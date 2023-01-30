@@ -124,6 +124,9 @@ function ioGetSingleProductDataFormated(){
         'id_parent' =>  $id_post,
         'title' => get_the_title(),
         'name' => $product->get_name(),
+
+        'free_shippement' =>get_field('free_shippement'),
+        'shippement_cost_unit'=>get_field('shippement_cost_unit'),
         'price' => ioPriceValidFilter($product->get_price()),
         'regular_price' => $product->get_regular_price(),
         'sale_price' => $product->get_sale_price(),
@@ -151,6 +154,7 @@ function ioGetSingleProductDataFormated(){
             'price_max' => !$children_data ? null : $children_data->getMaxPrice(),
         ),
         'variations_selected' => null, 
+
     
     );
 }

@@ -45,3 +45,35 @@ function ioGetAllShipmentsData()
 
     return $results;
 }
+
+function ioGetShipmentsMethodById($method_rate_id_request)
+{
+    global $woocommerce;
+    $results = null;
+
+    foreach ( ioBbloomer_get_all_shipping_zones() as $zone ) {
+       
+        $zone_shipping_methods = $zone->get_shipping_methods();
+      
+        foreach ( $zone_shipping_methods as $index => $method ) {
+           $method_rate_id = $method->get_rate_id(); // e.g. "flat_rate:18"
+
+           if ($method_rate_id_request === $method_rate_id){
+            $results = array(
+                'method_title' => $method->get_method_title(),
+                'method_id' => $method->id,
+                'method_rate_id' => $method->get_rate_id(),
+                'method_user_title' => $method->get_title(),
+                'method_is_enbled'=>$method->is_enabled(),
+                'method_cost' => $method->cost,
+                'method_description' => $method->get_method_description(),
+                'method_instance_id' => $method->get_instance_id(),
+                'min_amount' => $method->min_amount,
+                'class_shipping' => ""
+            );
+    }
+        }
+     }
+
+    return $results;
+}
