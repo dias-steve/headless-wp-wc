@@ -320,27 +320,27 @@ function ioGetProductStockData($listItem)
                     $allInStock = false;
                     $code_error = 10;
                     $available = false;
-                    array_push($resultsItems, array(
+                  $resultsItems[$product->get_id()] = array(
                         'id' => $product->get_id(),
                         'title' => $product->get_name(),
                         'in_stock' => $product->is_in_stock(),
                         'stock_quantity' => $product->get_stock_quantity(),
                         'available' => $available,
                         'code_error' => $code_error
-                    ));
+                    );
                 } elseif ($product->get_stock_quantity()) {
                     $quantityRest = $product->get_stock_quantity() - $item['quantity'];
                     if ($quantityRest < 0) {
                         $allInStock = false;
                         $code_error = 20;
-                        array_push($resultsItems, array(
+                        $resultsItems[$product->get_id()] = array(
                             'id' => $product->get_id(),
                             'title' =>  $product->get_name(),
                             'in_stock' => $product->is_in_stock(),
                             'stock_quantity' => $product->get_stock_quantity(),
                             'available' => $available,
                             'code_error' => $code_error
-                        ));
+                        );
                     }
                 }
             }
