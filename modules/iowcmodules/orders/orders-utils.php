@@ -224,7 +224,9 @@ function ioGetTotalPriceOrder($productIdList, $shippingMethod){
 
 function functionCalculCostShippment($shippemntCost, $itemCostunit,$quantityItem){
 
-    return($shippemntCost? (float)$shippemntCost: 0 )*
+    $result = ($shippemntCost? (float)$shippemntCost: 0 )*
         ( $itemCostunit ? (float)$itemCostunit: 0 )*
         (float)$quantityItem;
+
+    return number_format($result, 2);
 }
