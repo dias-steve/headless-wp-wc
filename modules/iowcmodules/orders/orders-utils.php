@@ -113,7 +113,7 @@ function ioGetTotalData($orderObject){
 }
 function ioGetTotalPriceOrder($productIdList, $shippingMethod){
 
-    $shippingCost = (int)$shippingMethod['method_cost'];
+    $shippingCost = (float)$shippingMethod['method_cost'];
     if (!is_array($productIdList)){
         return null;
     }
