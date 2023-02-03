@@ -161,9 +161,9 @@ function ioGetTotalPriceOrder($productIdList, $shippingMethod){
     ,$totalInitial);
 
     if (  $totalResult['is_all_free_shipping'] ){
-        $totalResult['total'] =  number_format( $totalResult['sub_total_product'], 2);
+        $totalResult['total'] =  $totalResult['sub_total_product'];
     }else{
-        $totalResult['total'] =  number_format( $totalResult['sub_total_shipping_cost_sup'] + $totalResult['sub_total_product'] + $totalResult['shippingCost'], 2);
+        $totalResult['total'] =  $totalResult['sub_total_shipping_cost_sup'] + $totalResult['sub_total_product'] + $totalResult['shippingCost'];
     }
 
 
