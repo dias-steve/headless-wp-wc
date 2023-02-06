@@ -163,7 +163,7 @@ class ChildrenProduct
             );
 
             if (!array_key_exists($terme, $listStockStatus)) {
-                $listStockStatus[$terme] = ioInStockConverterToBoolean($inStock);
+                $listStockStatus[$terme] = $this->inStockConverterToBoolean($inStock);
             } else {
                 if ($this->inStockConverterToBoolean($inStock)) {
                     $listStockStatus[$terme] = true;
@@ -244,8 +244,8 @@ class ChildrenProduct
         $childrens = $this->reformater_children_list;
         
         $variationInStock = false;
-        if(haveVariations($listVariation)){
-            if(!checkSanityProductChild($childrens)){
+        if($this->haveVariations($listVariation)){
+            if(!$this->checkSanityProductChild($childrens)){
                 return false;
             }
             foreach($listVariation as $variation){
@@ -256,8 +256,8 @@ class ChildrenProduct
     
             return  $variationInStock;
         }else{
-            if(isValidPrice($priceProductParent)){
-                return inStockConverterToBoolean($inStockStatusProductParent);
+            if(ioIsValidPrice($priceProductParent)){
+                return ioInStockConverterToBoolean($inStockStatusProductParent);
             }else{
                 return false;
             }
@@ -289,5 +289,15 @@ class ChildrenProduct
         return null;
     }
 
+    public function checkSanityProductChild($childrens){
+    
+        foreach($childrens as $child){
+            if(!ioIsValidPrice($child['price']) ){
+                return false;
+            }
+    
+        }
+        return true;
+    }
 
 }

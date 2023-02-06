@@ -383,3 +383,15 @@ function ioInStockConverterToBoolean($value) {
         return false;
     }
 }
+
+
+function ioCheckSanityProductChild($childrens){
+
+    foreach($childrens as $child){
+        if(!ioIsValidPrice($child['price']) ){
+            return false;
+        }
+
+    }
+    return true;
+}
