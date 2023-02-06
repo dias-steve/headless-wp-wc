@@ -143,7 +143,7 @@ function ioGetSingleProductDataFormated(){
 
         'on_sale' => !$children_data ? (($product->get_regular_price() !== "") && ($product->get_regular_price() !== $product->get_price())) : $children_data->haveOnSaleChild(),//|| 'parent',
         'in_stock' => $product->get_stock_status(),
-        'product_is_in_stock'=> !$children_data ? (isValidPrice(ioPriceValidFilter($product->get_price())) &&(inStockConverterToBoolean($product->get_stock_status()))) : $children_data->productIsInStock(),
+        'product_is_in_stock'=> !$children_data ? (ioIsValidPrice(ioPriceValidFilter($product->get_price())) &&(ioInStockConverterToBoolean($product->get_stock_status()))) : $children_data->productIsInStock(),
         'list_variations' => !$children_data ? null : $children_data->getListVariationAvailble(),
         'variation_list_detail'=>  !$children_data ? null : isGetDescriptionAttribut($product, $id_post),
         'variation_list_detail_v2' =>!$children_data ? null : isGetDescriptionAttributV2($product, $id_post),
@@ -375,3 +375,11 @@ function ioConvertStringRequestStockToObjectList($request){
     return   $productmap;
 }
 
+
+function ioInStockConverterToBoolean($value) {
+    if($value ==='instock'){
+        return true;
+    }else{
+        return false;
+    }
+}

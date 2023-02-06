@@ -110,7 +110,7 @@ class ChildrenProduct
                 'id_parent' =>  get_the_ID(),
                 'id' => $child_id,
                 'name' => $childData->get_name(),
-                'price' => priceValidFilter($childData->get_price()),
+                'price' => ioPriceValidFilter($childData->get_price()),
                 'regular_price' => $childData->get_regular_price(),
                 'stock_status' => $childData->get_stock_status(),
                 'variation_name' => $childData->get_variation_attributes(),
@@ -124,7 +124,7 @@ class ChildrenProduct
                 ),
                 'images_gallery' =>   $this->getGalleryChild($childData->get_variation_attributes()),
                 'sold_individualy' => $this->product->is_sold_individually(),
-                'product_is_in_stock' => (($childData->get_stock_status() ==='instock') && (isValidPrice($childData->get_price()))) ? true : false
+                'product_is_in_stock' => (($childData->get_stock_status() ==='instock') && (ioIsValidPrice($childData->get_price()))) ? true : false
 
             
             ));
@@ -163,7 +163,7 @@ class ChildrenProduct
             );
 
             if (!array_key_exists($terme, $listStockStatus)) {
-                $listStockStatus[$terme] = inStockConverterToBoolean($inStock);
+                $listStockStatus[$terme] = $this->inStockConverterToBoolean($inStock);
             } else {
                 if ($this->inStockConverterToBoolean($inStock)) {
                     $listStockStatus[$terme] = true;
