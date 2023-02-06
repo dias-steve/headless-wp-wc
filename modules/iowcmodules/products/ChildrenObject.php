@@ -163,7 +163,7 @@ class ChildrenProduct
             );
 
             if (!array_key_exists($terme, $listStockStatus)) {
-                $listStockStatus[$terme] = $this->inStockConverterToBoolean($inStock);
+                $listStockStatus[$terme] = ioInStockConverterToBoolean($inStock);
             } else {
                 if ($this->inStockConverterToBoolean($inStock)) {
                     $listStockStatus[$terme] = true;
