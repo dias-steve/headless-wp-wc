@@ -28,7 +28,10 @@ add_action('rest_api_init', 'customRoutesSettings', 15);
 /**
  * New
  */
+
+ // utils
 require get_template_directory() . '/utils/utils.php';
+require get_template_directory() . '/utils/customstheme-utils.php';
 
 //WOOCOMMERCE
 require get_template_directory() . '/modules/iowcmodules/products/products-functions.php';
@@ -36,6 +39,7 @@ require get_template_directory() . '/modules/iowcmodules/productcategory/product
 require get_template_directory() . '/modules/iowcmodules/shipping/shipping-functions.php';
 require get_template_directory() . '/modules/iowcmodules/coupon/coupon-functions.php';
 require get_template_directory() . '/modules/iowcmodules/orders/orders-functions.php';
+require get_template_directory() . '/modules/iowcmodules/settings/settings-functions.php';
 
 //MENU
 require get_template_directory() . '/modules/menu/menu-functions.php';

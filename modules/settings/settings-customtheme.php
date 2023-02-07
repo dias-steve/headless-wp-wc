@@ -1,7 +1,4 @@
 <?php
-
-
-
 function copyrightSection($wp_customize){
     //section
     $wp_customize->add_section(
@@ -27,7 +24,6 @@ function copyrightSection($wp_customize){
                     'type' => 'text'
                 )
             );
-    
 }
 
 function multiLangSection($wp_customize){
