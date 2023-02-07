@@ -149,6 +149,7 @@ function ioGetSingleProductDataFormated(){
         'date_created' => $product->get_date_created(),
         'children' => !$children_data ? null : $children_data->reformater_children_list,
      
+        'description' => get_field('description_product'),
 
         'on_sale' => !$children_data ? (($product->get_regular_price() !== "") && ($product->get_regular_price() !== $product->get_price())) : $children_data->haveOnSaleChild(),//|| 'parent',
         'in_stock' => $product->get_stock_status(),
