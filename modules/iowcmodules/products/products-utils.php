@@ -6,7 +6,7 @@
  *
  * @return array json
  */
-function ioGetProductData($queryArray){
+function ioGetProductData($queryArray,$withLocal){
 
     $results = array();
     //$queryArray['post_status' ] = 'publish'; //   'post_status' => 'publish',
@@ -21,9 +21,20 @@ function ioGetProductData($queryArray){
 
         $productData =  ioGetProductDataAperçuFormated();
 
-        array_push($results, 
-        $productData
-        );
+        if( $withLocal){
+
+            $withLocalPostList = ioMultilangPostUtils($productData);
+            foreach( $withLocalPostList as $withLocalPost){
+                array_push($results, 
+                $withLocalPost
+                );
+            }
+        }else{
+            array_push($results, 
+            $productData
+            );
+        }
+
     }
     
 
@@ -152,9 +163,6 @@ function ioGetSingleProductDataFormated(){
             'price_max' => !$children_data ? null : $children_data->getMaxPrice(),
         ),
         'variations_selected' => null, 
-
-        
-    
     );
 
     return $result;

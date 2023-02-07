@@ -22,12 +22,14 @@ add_action('rest_api_init', 'ioProductRoute');
 
 function ioGetProduct(WP_REST_Request $request) {
    
+    $withLocal = $request->get_param('withlocale') === 'true' ? true : false;
 
     return array(
         'status' => 200,
         'data' => array(
             'query' => ioConvertToQuery(array('product'), $request ),
-            'result' => ioGetProductData(ioConvertToQuery(array('product'), $request )))
+            'result' => ioGetProductData(ioConvertToQuery(array('product'), $request, ),  $withLocal)
+            )
         );
 }
 
