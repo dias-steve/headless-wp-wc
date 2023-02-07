@@ -117,8 +117,7 @@ function ioGetSingleProductDataFormated(){
     }
 
 
-
-    return array(
+    $result = array(
         "locale"=> "FR",
         'id' =>  $id_post,
         'id_parent' =>  $id_post,
@@ -155,8 +154,11 @@ function ioGetSingleProductDataFormated(){
         ),
         'variations_selected' => null, 
 
+        
     
     );
+
+    return ioMultilangPostUtils($result);
 }
 
 

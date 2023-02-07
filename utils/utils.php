@@ -27,3 +27,16 @@ function ioOperatorExtractor($str)
 
     return null;
 }
+
+function ioMultilangPostUtils($postData){
+    $langList = array('FR','EN');
+    $result = array();
+ 
+    foreach ($langList as $lang){
+        $postlang = $postData;
+        $postlang['locale'] = $lang;
+        array_push($result, $postlang);
+    }
+
+    return $result;
+}
