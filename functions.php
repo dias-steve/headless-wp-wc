@@ -29,11 +29,23 @@ add_action('rest_api_init', 'customRoutesSettings', 15);
  * New
  */
 require get_template_directory() . '/utils/utils.php';
+
+//WOOCOMMERCE
 require get_template_directory() . '/modules/iowcmodules/products/products-functions.php';
 require get_template_directory() . '/modules/iowcmodules/productcategory/productcategory-functions.php';
 require get_template_directory() . '/modules/iowcmodules/shipping/shipping-functions.php';
 require get_template_directory() . '/modules/iowcmodules/coupon/coupon-functions.php';
 require get_template_directory() . '/modules/iowcmodules/orders/orders-functions.php';
+
+//MENU
+require get_template_directory() . '/modules/menu/menu-functions.php';
+
+//Settings
+require get_template_directory() . '/modules/settings/settings-functions.php';
+
+//Page
+
+require get_template_directory() . '/modules/page/page-functions.php';
 
 
 

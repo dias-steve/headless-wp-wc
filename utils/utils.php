@@ -40,3 +40,15 @@ function ioMultilangPostUtils($postData){
 
     return $result;
 }
+
+function get_the_post_link_front_io(){
+    return '/'.get_post_type().'/'.get_the_ID();
+}
+
+function get_seo_data_io(){
+    return array(
+        'title_seo' => get_field('title_seo'),
+        'meta_description_seo' => get_field('meta_description_seo'),
+        'other_data_seo' => get_field('other_data_seo'),
+    );
+}
