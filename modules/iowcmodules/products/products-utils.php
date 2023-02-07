@@ -118,7 +118,6 @@ function ioGetSingleProductDataFormated(){
 
 
     $result = array(
-        "locale"=> "FR",
         'id' =>  $id_post,
         'id_parent' =>  $id_post,
         'title' => get_the_title(),
@@ -158,7 +157,7 @@ function ioGetSingleProductDataFormated(){
     
     );
 
-    return ioMultilangPostUtils($result);
+    return $result;
 }
 
 
